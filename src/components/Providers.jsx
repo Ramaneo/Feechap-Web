@@ -4,6 +4,7 @@ import { VerticalNavProvider } from '@menu/contexts/verticalNavContext'
 import { SettingsProvider } from '@core/contexts/settingsContext'
 import ThemeProvider from '@components/theme'
 import ReduxProvider from '@/redux-store/ReduxProvider'
+import AuthSyncProvider from '@components/AuthSyncProvider'
 
 // Styled Component Imports
 import AppReactToastify from '@/libs/styles/AppReactToastify'
@@ -22,14 +23,16 @@ const Providers = async props => {
 
   return (
     <NextAuthProvider basePath={process.env.NEXTAUTH_BASEPATH}>
-      <VerticalNavProvider>
-        <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
-          <ThemeProvider direction={direction} systemMode={systemMode}>
-            <ReduxProvider>{children}</ReduxProvider>
-            <AppReactToastify direction={direction} hideProgressBar />
-          </ThemeProvider>
-        </SettingsProvider>
-      </VerticalNavProvider>
+      <AuthSyncProvider>
+        <VerticalNavProvider>
+          <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
+            <ThemeProvider direction={direction} systemMode={systemMode}>
+              <ReduxProvider>{children}</ReduxProvider>
+              <AppReactToastify direction={direction} hideProgressBar />
+            </ThemeProvider>
+          </SettingsProvider>
+        </VerticalNavProvider>
+      </AuthSyncProvider>
     </NextAuthProvider>
   )
 }

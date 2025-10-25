@@ -1,644 +1,316 @@
 const verticalMenuData = dictionary => [
-  // This is how you will normally render submenu
+  // Dashboard
   {
     label: dictionary['navigation'].dashboards,
-    suffix: {
-      label: '5',
-      color: 'error'
-    },
     icon: 'tabler-smart-home',
-    children: [
-      // This is how you will normally render menu item
-      {
-        label: dictionary['navigation'].crm,
-        icon: 'tabler-circle',
-        href: '/dashboards/crm'
-      },
-      {
-        label: dictionary['navigation'].analytics,
-        icon: 'tabler-circle',
-        href: '/dashboards/analytics'
-      },
-      {
-        label: dictionary['navigation'].eCommerce,
-        icon: 'tabler-circle',
-        href: '/dashboards/ecommerce'
-      },
-      {
-        label: dictionary['navigation'].academy,
-        icon: 'tabler-circle',
-        href: '/dashboards/academy'
-      },
-      {
-        label: dictionary['navigation'].logistics,
-        icon: 'tabler-circle',
-        href: '/dashboards/logistics'
-      }
-    ]
+    href: '/dashboard'
   },
+
+  // Calculate (محاسبه هزینه چاپ)
   {
-    label: dictionary['navigation'].frontPages,
-    icon: 'tabler-files',
+    label: dictionary['navigation'].calculate,
+    icon: 'tabler-calculator',
     children: [
       {
-        label: dictionary['navigation'].landing,
-        href: '/front-pages/landing-page',
-        target: '_blank',
-        excludeLang: true
+        label: dictionary['navigation'].calculateOffsetSefareshi,
+        icon: 'tabler-printer',
+        children: [
+          {
+            label: dictionary['navigation'].calculateTakBargi,
+            icon: 'tabler-file',
+            href: '/calculate/offset-sefareshi/tak-bargi'
+          },
+          {
+            label: dictionary['navigation'].calculateChandBargi,
+            icon: 'tabler-files',
+            href: '/calculate/offset-sefareshi/chand-bargi',
+            disabled: true
+          },
+          {
+            label: dictionary['navigation'].calculateGhalebPishfarz,
+            icon: 'tabler-template',
+            href: '/calculate/offset-sefareshi/presets'
+          }
+        ]
       },
       {
-        label: dictionary['navigation'].pricing,
-        href: '/front-pages/pricing',
-        target: '_blank',
-        excludeLang: true
+        label: dictionary['navigation'].calculateGraphic,
+        icon: 'tabler-palette',
+        href: '/calculate/graphic',
+        disabled: true
       },
       {
-        label: dictionary['navigation'].payment,
-        href: '/front-pages/payment',
-        target: '_blank',
-        excludeLang: true
+        label: dictionary['navigation'].calculateDigital,
+        icon: 'tabler-device-desktop',
+        href: '/calculate/digital',
+        disabled: true
       },
       {
-        label: dictionary['navigation'].checkout,
-        href: '/front-pages/checkout',
-        target: '_blank',
-        excludeLang: true
+        label: dictionary['navigation'].calculatePublisher,
+        icon: 'tabler-book',
+        href: '/calculate/publisher',
+        disabled: true
       },
       {
-        label: dictionary['navigation'].helpCenter,
-        href: '/front-pages/help-center',
-        target: '_blank',
-        excludeLang: true
+        label: dictionary['navigation'].calculateOffsetAmade,
+        icon: 'tabler-forms',
+        href: '/calculate/offset-amade',
+        disabled: true
       }
     ]
   },
 
-  // This is how you will normally render menu section
+  // Price Tables (جدول قیمت‌ها)
   {
-    label: dictionary['navigation'].appsPages,
-    isSection: true,
+    label: dictionary['navigation'].priceTables,
+    icon: 'tabler-currency-dollar',
     children: [
       {
-        label: dictionary['navigation'].eCommerce,
+        label: dictionary['navigation'].calculateOffsetSefareshi,
+        children: [
+          {
+            label: dictionary['navigation'].pricesPaper,
+            icon: 'tabler-file-text',
+            href: '/prices/papers'
+          },
+          {
+            label: dictionary['navigation'].pricesLitography,
+            icon: 'tabler-photo',
+            href: '/prices/lithographies'
+          },
+          {
+            label: dictionary['navigation'].pricesNezarat,
+            icon: 'tabler-eye',
+            href: '/prices/monitorings'
+          },
+          {
+            label: dictionary['navigation'].pricesOffset,
+            children: [
+              {
+                label: dictionary['navigation'].pricesOffsetMachine,
+                icon: 'tabler-printer',
+                href: '/prices/colors'
+              },
+              {
+                label: dictionary['navigation'].pricesOffsetTiraj,
+                icon: 'tabler-copy',
+                href: '/prices/circulations'
+              }
+            ]
+          },
+          {
+            label: dictionary['navigation'].pricesCovers,
+            children: [
+              {
+                label: dictionary['navigation'].pricesUv,
+                icon: 'tabler-sun',
+                href: '/prices/uvs'
+              },
+              {
+                label: dictionary['navigation'].pricesSelefon,
+                icon: 'tabler-circle-dashed',
+                href: '/prices/selefons'
+              },
+              {
+                label: dictionary['navigation'].pricesLaminate,
+                icon: 'tabler-layers-intersect',
+                href: '/prices/laminates'
+              }
+            ]
+          },
+          {
+            label: dictionary['navigation'].pricesBox,
+            children: [
+              {
+                label: dictionary['navigation'].pricesBoxes,
+                icon: 'tabler-box',
+                href: '/prices/boxes'
+              },
+              {
+                label: dictionary['navigation'].pricesBoxPack,
+                icon: 'tabler-package',
+                href: '/prices/pockets'
+              },
+              {
+                label: dictionary['navigation'].pricesBoxSack,
+                icon: 'tabler-shopping-bag',
+                href: '/prices/bags'
+              }
+            ]
+          },
+          {
+            label: dictionary['navigation'].pricesSahafi,
+            icon: 'tabler-book-2',
+            href: '/prices/binderies'
+          },
+          {
+            label: dictionary['navigation'].pricesTakmili,
+            children: [
+              {
+                label: dictionary['navigation'].pricesTakmiliGhalebsazi,
+                icon: 'tabler-layout-grid',
+                href: '/prices/framings'
+              },
+              {
+                label: dictionary['navigation'].pricesTakmiliKelishesazi,
+                icon: 'tabler-stamp',
+                href: '/prices/plates'
+              },
+              {
+                label: dictionary['navigation'].pricesTakmiliTalakoob,
+                icon: 'tabler-sparkles',
+                href: '/prices/golds'
+              },
+              {
+                label: dictionary['navigation'].pricesTakmiliLetterpress,
+                icon: 'tabler-typography',
+                href: '/prices/letterpress'
+              },
+              {
+                label: dictionary['navigation'].pricesTakmiliBoresh,
+                icon: 'tabler-cut',
+                href: '/prices/cuts'
+              },
+              {
+                label: dictionary['navigation'].pricesTakmiliSarchasb,
+                icon: 'tabler-droplet',
+                href: '/prices/glues'
+              },
+              {
+                label: dictionary['navigation'].pricesTakmiliShomarezani,
+                icon: 'tabler-numbers',
+                href: '/prices/numerations'
+              },
+              {
+                label: dictionary['navigation'].pricesTakmiliPerferazh,
+                icon: 'tabler-dots',
+                href: '/prices/perforages'
+              }
+            ]
+          },
+          {
+            label: dictionary['navigation'].pricesOthers,
+            icon: 'tabler-dots-vertical',
+            href: '/prices/others'
+          }
+        ]
+      },
+      {
+        label: dictionary['navigation'].calculateGraphic,
+        icon: 'tabler-palette',
+        href: '/prices/graphic',
+        disabled: true
+      },
+      {
+        label: dictionary['navigation'].calculateDigital,
+        icon: 'tabler-device-desktop',
+        href: '/prices/digital',
+        disabled: true
+      },
+      {
+        label: dictionary['navigation'].calculatePublisher,
+        icon: 'tabler-book',
+        href: '/prices/publisher',
+        disabled: true
+      },
+      {
+        label: dictionary['navigation'].calculateOffsetAmade,
+        icon: 'tabler-forms',
+        href: '/prices/offset-amade',
+        disabled: true
+      }
+    ]
+  },
+
+  // Management Coworkers (مدیریت همکاران)
+  {
+    label: dictionary['navigation'].managementCoworkers,
+    icon: 'tabler-users',
+    children: [
+      {
+        label: dictionary['navigation'].coworkersList,
+        icon: 'tabler-user-circle',
+        href: '/coworkers/list'
+      }
+    ]
+  },
+
+  // Management Customers (مدیریت مشتریان)
+  {
+    label: dictionary['navigation'].managementCustomers,
+    icon: 'tabler-user-heart',
+    children: [
+      {
+        label: dictionary['navigation'].customersList,
+        icon: 'tabler-list',
+        href: '/customers/list'
+      },
+      {
+        label: dictionary['navigation'].customersOrders,
         icon: 'tabler-shopping-cart',
-        children: [
-          {
-            label: dictionary['navigation'].dashboard,
-            href: '/apps/ecommerce/dashboard'
-          },
-          {
-            label: dictionary['navigation'].products,
-            children: [
-              {
-                label: dictionary['navigation'].list,
-                href: '/apps/ecommerce/products/list'
-              },
-              {
-                label: dictionary['navigation'].add,
-                href: '/apps/ecommerce/products/add'
-              },
-              {
-                label: dictionary['navigation'].category,
-                href: '/apps/ecommerce/products/category'
-              }
-            ]
-          },
-          {
-            label: dictionary['navigation'].orders,
-            children: [
-              {
-                label: dictionary['navigation'].list,
-                href: '/apps/ecommerce/orders/list'
-              },
-              {
-                label: dictionary['navigation'].details,
-                href: '/apps/ecommerce/orders/details/5434',
-                exactMatch: false,
-                activeUrl: '/apps/ecommerce/orders/details'
-              }
-            ]
-          },
-          {
-            label: dictionary['navigation'].customers,
-            children: [
-              {
-                label: dictionary['navigation'].list,
-                href: '/apps/ecommerce/customers/list'
-              },
-              {
-                label: dictionary['navigation'].details,
-                href: '/apps/ecommerce/customers/details/879861',
-                exactMatch: false,
-                activeUrl: '/apps/ecommerce/customers/details'
-              }
-            ]
-          },
-          {
-            label: dictionary['navigation'].manageReviews,
-            href: '/apps/ecommerce/manage-reviews'
-          },
-          {
-            label: dictionary['navigation'].referrals,
-            href: '/apps/ecommerce/referrals'
-          },
-          {
-            label: dictionary['navigation'].settings,
-            href: '/apps/ecommerce/settings'
-          }
-        ]
-      },
-      {
-        label: dictionary['navigation'].academy,
-        icon: 'tabler-school',
-        children: [
-          {
-            label: dictionary['navigation'].dashboard,
-            href: '/apps/academy/dashboard'
-          },
-          {
-            label: dictionary['navigation'].myCourses,
-            href: '/apps/academy/my-courses'
-          },
-          {
-            label: dictionary['navigation'].courseDetails,
-            href: '/apps/academy/course-details'
-          }
-        ]
-      },
-      {
-        label: dictionary['navigation'].logistics,
-        icon: 'tabler-truck',
-        children: [
-          {
-            label: dictionary['navigation'].dashboard,
-            href: '/apps/logistics/dashboard'
-          },
-          {
-            label: dictionary['navigation'].fleet,
-            href: '/apps/logistics/fleet'
-          }
-        ]
-      },
-      {
-        label: dictionary['navigation'].email,
-        icon: 'tabler-mail',
-        href: '/apps/email',
-        exactMatch: false,
-        activeUrl: '/apps/email'
-      },
-      {
-        label: dictionary['navigation'].chat,
-        icon: 'tabler-message-circle-2',
-        href: '/apps/chat'
-      },
-      {
-        label: dictionary['navigation'].calendar,
-        icon: 'tabler-calendar',
-        href: '/apps/calendar'
-      },
-      {
-        label: dictionary['navigation'].kanban,
-        icon: 'tabler-copy',
-        href: '/apps/kanban'
-      },
-      {
-        label: dictionary['navigation'].invoice,
-        icon: 'tabler-file-description',
-        children: [
-          {
-            label: dictionary['navigation'].list,
-            icon: 'tabler-circle',
-            href: '/apps/invoice/list'
-          },
-          {
-            label: dictionary['navigation'].preview,
-            icon: 'tabler-circle',
-            href: '/apps/invoice/preview/4987',
-            exactMatch: false,
-            activeUrl: '/apps/invoice/preview'
-          },
-          {
-            label: dictionary['navigation'].edit,
-            icon: 'tabler-circle',
-            href: '/apps/invoice/edit/4987',
-            exactMatch: false,
-            activeUrl: '/apps/invoice/edit'
-          },
-          {
-            label: dictionary['navigation'].add,
-            icon: 'tabler-circle',
-            href: '/apps/invoice/add'
-          }
-        ]
-      },
-      {
-        label: dictionary['navigation'].user,
-        icon: 'tabler-user',
-        children: [
-          {
-            label: dictionary['navigation'].list,
-            icon: 'tabler-circle',
-            href: '/apps/user/list'
-          },
-          {
-            label: dictionary['navigation'].view,
-            icon: 'tabler-circle',
-            href: '/apps/user/view'
-          }
-        ]
-      },
-      {
-        label: dictionary['navigation'].rolesPermissions,
-        icon: 'tabler-lock',
-        children: [
-          {
-            label: dictionary['navigation'].roles,
-            icon: 'tabler-circle',
-            href: '/apps/roles'
-          },
-          {
-            label: dictionary['navigation'].permissions,
-            icon: 'tabler-circle',
-            href: '/apps/permissions'
-          }
-        ]
-      },
-      {
-        label: dictionary['navigation'].pages,
-        icon: 'tabler-file',
-        children: [
-          {
-            label: dictionary['navigation'].userProfile,
-            icon: 'tabler-circle',
-            href: '/pages/user-profile'
-          },
-          {
-            label: dictionary['navigation'].accountSettings,
-            icon: 'tabler-circle',
-            href: '/pages/account-settings'
-          },
-          {
-            label: dictionary['navigation'].faq,
-            icon: 'tabler-circle',
-            href: '/pages/faq'
-          },
-          {
-            label: dictionary['navigation'].pricing,
-            icon: 'tabler-circle',
-            href: '/pages/pricing'
-          },
-          {
-            label: dictionary['navigation'].miscellaneous,
-            icon: 'tabler-circle',
-            children: [
-              {
-                label: dictionary['navigation'].comingSoon,
-                icon: 'tabler-circle',
-                href: '/pages/misc/coming-soon',
-                target: '_blank'
-              },
-              {
-                label: dictionary['navigation'].underMaintenance,
-                icon: 'tabler-circle',
-                href: '/pages/misc/under-maintenance',
-                target: '_blank'
-              },
-              {
-                label: dictionary['navigation'].pageNotFound404,
-                icon: 'tabler-circle',
-                href: '/pages/misc/404-not-found',
-                target: '_blank'
-              },
-              {
-                label: dictionary['navigation'].notAuthorized401,
-                icon: 'tabler-circle',
-                href: '/pages/misc/401-not-authorized',
-                target: '_blank'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        label: dictionary['navigation'].authPages,
-        icon: 'tabler-shield-lock',
-        children: [
-          {
-            label: dictionary['navigation'].login,
-            icon: 'tabler-circle',
-            children: [
-              {
-                label: dictionary['navigation'].loginV1,
-                icon: 'tabler-circle',
-                href: '/pages/auth/login-v1',
-                target: '_blank'
-              },
-              {
-                label: dictionary['navigation'].loginV2,
-                icon: 'tabler-circle',
-                href: '/pages/auth/login-v2',
-                target: '_blank'
-              }
-            ]
-          },
-          {
-            label: dictionary['navigation'].register,
-            icon: 'tabler-circle',
-            children: [
-              {
-                label: dictionary['navigation'].registerV1,
-                icon: 'tabler-circle',
-                href: '/pages/auth/register-v1',
-                target: '_blank'
-              },
-              {
-                label: dictionary['navigation'].registerV2,
-                icon: 'tabler-circle',
-                href: '/pages/auth/register-v2',
-                target: '_blank'
-              },
-              {
-                label: dictionary['navigation'].registerMultiSteps,
-                icon: 'tabler-circle',
-                href: '/pages/auth/register-multi-steps',
-                target: '_blank'
-              }
-            ]
-          },
-          {
-            label: dictionary['navigation'].verifyEmail,
-            icon: 'tabler-circle',
-            children: [
-              {
-                label: dictionary['navigation'].verifyEmailV1,
-                icon: 'tabler-circle',
-                href: '/pages/auth/verify-email-v1',
-                target: '_blank'
-              },
-              {
-                label: dictionary['navigation'].verifyEmailV2,
-                icon: 'tabler-circle',
-                href: '/pages/auth/verify-email-v2',
-                target: '_blank'
-              }
-            ]
-          },
-          {
-            label: dictionary['navigation'].forgotPassword,
-            icon: 'tabler-circle',
-            children: [
-              {
-                label: dictionary['navigation'].forgotPasswordV1,
-                icon: 'tabler-circle',
-                href: '/pages/auth/forgot-password-v1',
-                target: '_blank'
-              },
-              {
-                label: dictionary['navigation'].forgotPasswordV2,
-                icon: 'tabler-circle',
-                href: '/pages/auth/forgot-password-v2',
-                target: '_blank'
-              }
-            ]
-          },
-          {
-            label: dictionary['navigation'].resetPassword,
-            icon: 'tabler-circle',
-            children: [
-              {
-                label: dictionary['navigation'].resetPasswordV1,
-                icon: 'tabler-circle',
-                href: '/pages/auth/reset-password-v1',
-                target: '_blank'
-              },
-              {
-                label: dictionary['navigation'].resetPasswordV2,
-                icon: 'tabler-circle',
-                href: '/pages/auth/reset-password-v2',
-                target: '_blank'
-              }
-            ]
-          },
-          {
-            label: dictionary['navigation'].twoSteps,
-            icon: 'tabler-circle',
-            children: [
-              {
-                label: dictionary['navigation'].twoStepsV1,
-                icon: 'tabler-circle',
-                href: '/pages/auth/two-steps-v1',
-                target: '_blank'
-              },
-              {
-                label: dictionary['navigation'].twoStepsV2,
-                icon: 'tabler-circle',
-                href: '/pages/auth/two-steps-v2',
-                target: '_blank'
-              }
-            ]
-          }
-        ]
-      },
-      {
-        label: dictionary['navigation'].wizardExamples,
-        icon: 'tabler-dots',
-        children: [
-          {
-            label: dictionary['navigation'].checkout,
-            icon: 'tabler-circle',
-            href: '/pages/wizard-examples/checkout'
-          },
-          {
-            label: dictionary['navigation'].propertyListing,
-            icon: 'tabler-circle',
-            href: '/pages/wizard-examples/property-listing'
-          },
-          {
-            label: dictionary['navigation'].createDeal,
-            icon: 'tabler-circle',
-            href: '/pages/wizard-examples/create-deal'
-          }
-        ]
-      },
-      {
-        label: dictionary['navigation'].dialogExamples,
-        icon: 'tabler-square',
-        href: '/pages/dialog-examples'
-      },
-      {
-        label: dictionary['navigation'].widgetExamples,
-        icon: 'tabler-chart-bar',
-        children: [
-          {
-            label: dictionary['navigation'].basic,
-            href: '/pages/widget-examples/basic'
-          },
-          {
-            label: dictionary['navigation'].advanced,
-            icon: 'tabler-circle',
-            href: '/pages/widget-examples/advanced'
-          },
-          {
-            label: dictionary['navigation'].statistics,
-            icon: 'tabler-circle',
-            href: '/pages/widget-examples/statistics'
-          },
-          {
-            label: dictionary['navigation'].charts,
-            icon: 'tabler-circle',
-            href: '/pages/widget-examples/charts'
-          },
-          {
-            label: dictionary['navigation'].actions,
-            href: '/pages/widget-examples/actions'
-          }
-        ]
+        href: '/customers/orders'
       }
     ]
   },
+
+  // Settings (تنظیمات)
   {
-    label: dictionary['navigation'].formsAndTables,
-    isSection: true,
+    label: dictionary['navigation'].settings,
+    icon: 'tabler-settings',
     children: [
       {
-        label: dictionary['navigation'].formLayouts,
-        icon: 'tabler-layout',
-        href: '/forms/form-layouts'
+        label: dictionary['navigation'].settingsPrices,
+        icon: 'tabler-coin',
+        href: '/settings/prices'
       },
       {
-        label: dictionary['navigation'].formValidation,
-        icon: 'tabler-checkup-list',
-        href: '/forms/form-validation'
-      },
-      {
-        label: dictionary['navigation'].formWizard,
-        icon: 'tabler-git-merge',
-        href: '/forms/form-wizard'
-      },
-      {
-        label: dictionary['navigation'].reactTable,
-        icon: 'tabler-table',
-        href: '/react-table'
-      },
-      {
-        label: dictionary['navigation'].formELements,
-        icon: 'tabler-checkbox',
-        suffix: <i className='tabler-external-link text-xl' />,
-        href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/user-interface/form-elements`,
-        target: '_blank'
-      },
-      {
-        label: dictionary['navigation'].muiTables,
-        icon: 'tabler-layout-board-split',
-        href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/user-interface/mui-table`,
-        suffix: <i className='tabler-external-link text-xl' />,
-        target: '_blank'
+        label: dictionary['navigation'].settingsFactor,
+        icon: 'tabler-file-invoice',
+        href: '/settings/factor'
       }
     ]
   },
+
+  // Admin Section (for admin users)
   {
-    label: dictionary['navigation'].chartsMisc,
+    label: dictionary['navigation'].adminSection,
     isSection: true,
     children: [
       {
-        label: dictionary['navigation'].charts,
-        icon: 'tabler-chart-donut-2',
+        label: dictionary['navigation'].packages,
+        icon: 'tabler-package',
         children: [
           {
-            label: dictionary['navigation'].apex,
-            icon: 'tabler-circle',
-            href: '/charts/apex-charts'
+            label: dictionary['navigation'].packagesBundles,
+            icon: 'tabler-packages',
+            href: '/packages/bundles'
           },
           {
-            label: dictionary['navigation'].recharts,
-            icon: 'tabler-circle',
-            href: '/charts/recharts'
+            label: dictionary['navigation'].packagesModules,
+            icon: 'tabler-components',
+            href: '/packages/modules'
+          },
+          {
+            label: dictionary['navigation'].packagesDiscounts,
+            icon: 'tabler-discount',
+            href: '/packages/discounts'
           }
         ]
       },
       {
-        label: dictionary['navigation'].foundation,
-        icon: 'tabler-cards',
-        href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/user-interface/foundation`,
-        suffix: <i className='tabler-external-link text-xl' />,
-        target: '_blank'
+        label: dictionary['navigation'].settingsFormulas,
+        icon: 'tabler-math',
+        href: '/settings/formulas'
       },
       {
-        label: dictionary['navigation'].components,
-        icon: 'tabler-atom',
-        href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/user-interface/components`,
-        suffix: <i className='tabler-external-link text-xl' />,
-        target: '_blank'
+        label: dictionary['navigation'].settingsUsers,
+        icon: 'tabler-users-group',
+        href: '/users'
       },
       {
-        label: dictionary['navigation'].menuExamples,
-        icon: 'tabler-list-search',
-        href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/menu-examples/overview`,
-        suffix: <i className='tabler-external-link text-xl' />,
-        target: '_blank'
-      },
-      {
-        label: dictionary['navigation'].raiseSupport,
-        icon: 'tabler-lifebuoy',
-        suffix: <i className='tabler-external-link text-xl' />,
-        target: '_blank',
-        href: 'https://pixinvent.ticksy.com'
-      },
-      {
-        label: dictionary['navigation'].documentation,
-        icon: 'tabler-book-2',
-        suffix: <i className='tabler-external-link text-xl' />,
-        target: '_blank',
-        href: `${process.env.NEXT_PUBLIC_DOCS_URL}`
-      },
-      {
-        label: dictionary['navigation'].others,
-        icon: 'tabler-menu-2',
-        children: [
-          {
-            suffix: {
-              label: 'New',
-              color: 'info'
-            },
-            label: dictionary['navigation'].itemWithBadge,
-            icon: 'tabler-circle'
-          },
-          {
-            label: dictionary['navigation'].externalLink,
-            icon: 'tabler-circle',
-            href: 'https://pixinvent.com',
-            target: '_blank',
-            suffix: <i className='tabler-external-link text-xl' />
-          },
-          {
-            label: dictionary['navigation'].menuLevels,
-            icon: 'tabler-circle',
-            children: [
-              {
-                label: dictionary['navigation'].menuLevel2,
-                icon: 'tabler-circle'
-              },
-              {
-                label: dictionary['navigation'].menuLevel2,
-                icon: 'tabler-circle',
-                children: [
-                  {
-                    label: dictionary['navigation'].menuLevel3,
-                    icon: 'tabler-circle'
-                  },
-                  {
-                    label: dictionary['navigation'].menuLevel3,
-                    icon: 'tabler-circle'
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            label: dictionary['navigation'].disabledMenu,
-            disabled: true
-          }
-        ]
+        label: dictionary['navigation'].settingsFormats,
+        icon: 'tabler-dimensions',
+        href: '/settings/formats'
       }
     ]
   }

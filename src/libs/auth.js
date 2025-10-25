@@ -4,6 +4,9 @@ import GoogleProvider from 'next-auth/providers/google'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { PrismaClient } from '@prisma/client'
 
+// Local Imports
+import { authService } from '@/services'
+
 const prisma = new PrismaClient()
 
 export const authOptions = {
@@ -15,7 +18,8 @@ export const authOptions = {
     CredentialProvider({
       // ** The name to display on the sign in form (e.g. 'Sign in with...')
       // ** For more details on Credentials Provider, visit https://next-auth.js.org/providers/credentials
-      name: 'Credentials',
+      id: 'otp-credentials',
+      name: 'OTP Authentication',
       type: 'credentials',
 
       /*
@@ -25,11 +29,47 @@ export const authOptions = {
       credentials: {},
       async authorize(credentials) {
         /*
-         * You need to provide your own logic here that takes the credentials submitted and returns either
-         * an object representing a user or value that is false/null if the credentials are invalid.
-         * For e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
-         * You can also use the `req` object to obtain additional parameters (i.e., the request IP address)
+         * OTP-based authentication logic
+         * This expects credentials to contain: token (from OTP request) and otp (verification code)
          */
+        const { token, otp } = credentials
+
+        try {
+          if (!token || !otp) {
+            throw new Error('Token and OTP are required')
+          }
+
+          // ** Verify OTP with backend
+          const authResult = await authService.verifyOtp(token, otp)
+
+          if (authResult && authResult.user) {
+            // ** Return user object with backend token for future API calls
+            return {
+              id: authResult.user.id?.toString() || Math.random().toString(),
+              mobile: authResult.user.mobile,
+              verified_at: authResult.user.verified_at,
+              panel_id: authResult.user.panel_id,
+              accessToken: authResult.token,
+              // Add any other user properties you need
+              ...authResult.user
+            }
+          }
+
+          return null
+        } catch (error) {
+          console.error('OTP Authorization Error:', error)
+          throw new Error(error.message || 'OTP verification failed')
+        }
+      }
+    }),
+    CredentialProvider({
+      // ** Legacy email/password authentication (keeping for backward compatibility)
+      id: 'email-credentials',
+      name: 'Email Credentials',
+      type: 'credentials',
+
+      credentials: {},
+      async authorize(credentials) {
         const { email, password } = credentials
 
         try {
@@ -94,6 +134,9 @@ export const authOptions = {
     signIn: '/login'
   },
 
+  // Enable debug in development
+  debug: process.env.NODE_ENV === 'development',
+
   // ** Please refer to https://next-auth.js.org/configuration/options#callbacks for more `callbacks` options
   callbacks: {
     /*
@@ -107,7 +150,12 @@ export const authOptions = {
          * For adding custom parameters to user in session, we first need to add those parameters
          * in token which then will be available in the `session()` callback
          */
-        token.name = user.name
+        token.id = user.id
+        token.mobile = user.mobile
+        token.verified_at = user.verified_at
+        token.panel_id = user.panel_id
+        token.accessToken = user.accessToken
+        token.name = user.name || user.mobile // Use mobile as name if name not available
       }
 
       return token
@@ -115,6 +163,11 @@ export const authOptions = {
     async session({ session, token }) {
       if (session.user) {
         // ** Add custom params to user in session which are added in `jwt()` callback via `token` parameter
+        session.user.id = token.id
+        session.user.mobile = token.mobile
+        session.user.verified_at = token.verified_at
+        session.user.panel_id = token.panel_id
+        session.user.accessToken = token.accessToken
         session.user.name = token.name
       }
 

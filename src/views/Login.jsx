@@ -18,6 +18,9 @@ import Button from '@mui/material/Button'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Divider from '@mui/material/Divider'
 import Alert from '@mui/material/Alert'
+import Tabs from '@mui/material/Tabs'
+import Tab from '@mui/material/Tab'
+import Box from '@mui/material/Box'
 
 // Third-party Imports
 import { signIn } from 'next-auth/react'
@@ -29,6 +32,8 @@ import classnames from 'classnames'
 // Component Imports
 import Logo from '@components/layout/shared/Logo'
 import CustomTextField from '@core/components/mui/TextField'
+import MobileInput from '@/components/auth/MobileInput'
+import OtpVerification from '@/components/auth/OtpVerification'
 
 // Config Imports
 import themeConfig from '@configs/themeConfig'
@@ -36,6 +41,9 @@ import themeConfig from '@configs/themeConfig'
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant'
 import { useSettings } from '@core/hooks/useSettings'
+
+// Service Imports
+import { authService } from '@/services'
 
 // Util Imports
 import { getLocalizedUrl } from '@/utils/i18n'
@@ -77,6 +85,9 @@ const Login = ({ mode }) => {
   // States
   const [isPasswordShown, setIsPasswordShown] = useState(false)
   const [errorState, setErrorState] = useState(null)
+  const [authMethod, setAuthMethod] = useState('otp') // 'otp' or 'email'
+  const [otpStep, setOtpStep] = useState('mobile') // 'mobile' or 'verification'
+  const [otpData, setOtpData] = useState(null)
 
   // Vars
   const darkImg = '/images/pages/auth-mask-dark.png'
@@ -118,7 +129,7 @@ const Login = ({ mode }) => {
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
 
   const onSubmit = async data => {
-    const res = await signIn('credentials', {
+    const res = await signIn('email-credentials', {
       email: data.email,
       password: data.password,
       redirect: false
@@ -136,6 +147,64 @@ const Login = ({ mode }) => {
         setErrorState(error)
       }
     }
+  }
+
+  // OTP Authentication handlers
+  const handleOtpSent = data => {
+    setOtpData(data)
+    setOtpStep('verification')
+    setErrorState(null)
+  }
+
+  const handleOtpVerification = async (token, otp) => {
+    try {
+      const res = await signIn('otp-credentials', {
+        token,
+        otp,
+        redirect: false
+      })
+
+      if (res && res.ok && res.error === null) {
+        // Vars
+        const redirectURL = searchParams.get('redirectTo') ?? '/'
+        router.replace(getLocalizedUrl(redirectURL, locale))
+      } else {
+        throw new Error(res?.error || 'OTP verification failed')
+      }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  const handleBackToMobile = () => {
+    setOtpStep('mobile')
+    setOtpData(null)
+    setErrorState(null)
+  }
+
+  const handleResendOtp = async mobile => {
+    try {
+      const result = await authService.requestOtp(mobile)
+      setOtpData({
+        ...otpData,
+        token: result.token,
+        otp: result.otp,
+        message: result.message
+      })
+    } catch (error) {
+      throw error
+    }
+  }
+
+  const handleError = error => {
+    setErrorState(error)
+  }
+
+  const handleAuthMethodChange = (event, newValue) => {
+    setAuthMethod(newValue)
+    setErrorState(null)
+    setOtpStep('mobile')
+    setOtpData(null)
   }
 
   return (
@@ -160,108 +229,163 @@ const Login = ({ mode }) => {
             <Typography variant='h4'>{`Welcome to ${themeConfig.templateName}! 👋🏻`}</Typography>
             <Typography>Please sign-in to your account and start the adventure</Typography>
           </div>
-          <Alert icon={false} className='bg-[var(--mui-palette-primary-lightOpacity)]'>
-            <Typography variant='body2' color='primary.main'>
-              Email: <span className='font-medium'>admin@vuexy.com</span> / Pass:{' '}
-              <span className='font-medium'>admin</span>
-            </Typography>
-          </Alert>
-          <form
-            noValidate
-            autoComplete='off'
-            action={() => {}}
-            onSubmit={handleSubmit(onSubmit)}
-            className='flex flex-col gap-6'
-          >
-            <Controller
-              name='email'
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <CustomTextField
-                  {...field}
-                  autoFocus
-                  fullWidth
-                  type='email'
-                  label='Email'
-                  placeholder='Enter your email'
-                  onChange={e => {
-                    field.onChange(e.target.value)
-                    errorState !== null && setErrorState(null)
-                  }}
-                  {...((errors.email || errorState !== null) && {
-                    error: true,
-                    helperText: errors?.email?.message || errorState?.message[0]
-                  })}
+
+          {/* Authentication Method Tabs */}
+          <Box sx={{ width: '100%' }}>
+            <Tabs
+              value={authMethod}
+              onChange={handleAuthMethodChange}
+              variant='fullWidth'
+              sx={{ borderBottom: 1, borderColor: 'divider' }}
+            >
+              <Tab label='OTP Login' value='otp' />
+              <Tab label='Email Login' value='email' />
+            </Tabs>
+          </Box>
+
+          {/* Error Display */}
+          {errorState && (
+            <Alert severity='error' onClose={() => setErrorState(null)}>
+              {errorState}
+            </Alert>
+          )}
+
+          {/* OTP Authentication Flow */}
+          {authMethod === 'otp' && (
+            <Box>
+              {otpStep === 'mobile' && <MobileInput onOtpSent={handleOtpSent} onError={handleError} />}
+
+              {otpStep === 'verification' && otpData && (
+                <OtpVerification
+                  mobile={otpData.mobile}
+                  token={otpData.token}
+                  testOtp={otpData.otp}
+                  onVerificationSuccess={handleOtpVerification}
+                  onError={handleError}
+                  onBackToMobile={handleBackToMobile}
+                  onResendOtp={handleResendOtp}
                 />
               )}
-            />
-            <Controller
-              name='password'
-              control={control}
-              rules={{ required: true }}
-              render={({ field }) => (
-                <CustomTextField
-                  {...field}
-                  fullWidth
-                  label='Password'
-                  placeholder='············'
-                  id='login-password'
-                  type={isPasswordShown ? 'text' : 'password'}
-                  onChange={e => {
-                    field.onChange(e.target.value)
-                    errorState !== null && setErrorState(null)
-                  }}
-                  slotProps={{
-                    input: {
-                      endAdornment: (
-                        <InputAdornment position='end'>
-                          <IconButton
-                            edge='end'
-                            onClick={handleClickShowPassword}
-                            onMouseDown={e => e.preventDefault()}
-                          >
-                            <i className={isPasswordShown ? 'tabler-eye' : 'tabler-eye-off'} />
-                          </IconButton>
-                        </InputAdornment>
-                      )
-                    }
-                  }}
-                  {...(errors.password && { error: true, helperText: errors.password.message })}
-                />
-              )}
-            />
-            <div className='flex justify-between items-center gap-x-3 gap-y-1 flex-wrap'>
-              <FormControlLabel control={<Checkbox defaultChecked />} label='Remember me' />
-              <Typography
-                className='text-end'
-                color='primary.main'
-                component={Link}
-                href={getLocalizedUrl('/forgot-password', locale)}
+            </Box>
+          )}
+
+          {/* Email Authentication Form */}
+          {authMethod === 'email' && (
+            <>
+              <Alert icon={false} className='bg-[var(--mui-palette-primary-lightOpacity)]'>
+                <Typography variant='body2' color='primary.main'>
+                  Email: <span className='font-medium'>admin@vuexy.com</span> / Pass:{' '}
+                  <span className='font-medium'>admin</span>
+                </Typography>
+              </Alert>
+              <form
+                noValidate
+                autoComplete='off'
+                action={() => {}}
+                onSubmit={handleSubmit(onSubmit)}
+                className='flex flex-col gap-6'
               >
-                Forgot password?
-              </Typography>
-            </div>
-            <Button fullWidth variant='contained' type='submit'>
-              Login
-            </Button>
+                <Controller
+                  name='email'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <CustomTextField
+                      {...field}
+                      autoFocus
+                      fullWidth
+                      type='email'
+                      label='Email'
+                      placeholder='Enter your email'
+                      onChange={e => {
+                        field.onChange(e.target.value)
+                        errorState !== null && setErrorState(null)
+                      }}
+                      {...((errors.email || errorState !== null) && {
+                        error: true,
+                        helperText: errors?.email?.message || errorState?.message[0]
+                      })}
+                    />
+                  )}
+                />
+                <Controller
+                  name='password'
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <CustomTextField
+                      {...field}
+                      fullWidth
+                      label='Password'
+                      placeholder='············'
+                      id='login-password'
+                      type={isPasswordShown ? 'text' : 'password'}
+                      onChange={e => {
+                        field.onChange(e.target.value)
+                        errorState !== null && setErrorState(null)
+                      }}
+                      slotProps={{
+                        input: {
+                          endAdornment: (
+                            <InputAdornment position='end'>
+                              <IconButton
+                                edge='end'
+                                onClick={handleClickShowPassword}
+                                onMouseDown={e => e.preventDefault()}
+                              >
+                                <i className={isPasswordShown ? 'tabler-eye' : 'tabler-eye-off'} />
+                              </IconButton>
+                            </InputAdornment>
+                          )
+                        }
+                      }}
+                      {...(errors.password && { error: true, helperText: errors.password.message })}
+                    />
+                  )}
+                />
+                <div className='flex justify-between items-center gap-x-3 gap-y-1 flex-wrap'>
+                  <FormControlLabel control={<Checkbox defaultChecked />} label='Remember me' />
+                  <Typography
+                    className='text-end'
+                    color='primary.main'
+                    component={Link}
+                    href={getLocalizedUrl('/forgot-password', locale)}
+                  >
+                    Forgot password?
+                  </Typography>
+                </div>
+                <Button fullWidth variant='contained' type='submit'>
+                  Login
+                </Button>
+                <div className='flex justify-center items-center flex-wrap gap-2'>
+                  <Typography>New on our platform?</Typography>
+                  <Typography component={Link} href={getLocalizedUrl('/register', locale)} color='primary.main'>
+                    Create an account
+                  </Typography>
+                </div>
+                <Divider className='gap-2'>or</Divider>
+                <Button
+                  color='secondary'
+                  className='self-center text-textPrimary'
+                  startIcon={<img src='/images/logos/google.png' alt='Google' width={22} />}
+                  sx={{ '& .MuiButton-startIcon': { marginInlineEnd: 3 } }}
+                  onClick={() => signIn('google')}
+                >
+                  Sign in with Google
+                </Button>
+              </form>
+            </>
+          )}
+
+          {/* Common Elements for both auth methods */}
+          {authMethod === 'otp' && (
             <div className='flex justify-center items-center flex-wrap gap-2'>
               <Typography>New on our platform?</Typography>
               <Typography component={Link} href={getLocalizedUrl('/register', locale)} color='primary.main'>
                 Create an account
               </Typography>
             </div>
-            <Divider className='gap-2'>or</Divider>
-            <Button
-              color='secondary'
-              className='self-center text-textPrimary'
-              startIcon={<img src='/images/logos/google.png' alt='Google' width={22} />}
-              sx={{ '& .MuiButton-startIcon': { marginInlineEnd: 3 } }}
-              onClick={() => signIn('google')}
-            >
-              Sign in with Google
-            </Button>
-          </form>
+          )}
         </div>
       </div>
     </div>

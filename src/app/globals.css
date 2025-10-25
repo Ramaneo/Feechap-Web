@@ -50,6 +50,20 @@ ul:not([class]) {
   padding-inline-start: 40px;
 }
 
+@font-face {
+  font-family: 'iransans';
+  src:
+    url('./../../public/fonts/iransans/woff2/IRANSansWeb\(FaNum\).woff2') format('woff2'),
+    url('./../../public/fonts/iransans/woff/IRANSansWeb\(FaNum\).woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.persian-font {
+  font-family: 'iransans', sans-serif;
+}
+
 /*! Do not remove the following styles */
 /*
   Fix the popout / submenu closing issue when using hover trigger to open the menu and using

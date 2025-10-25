@@ -10,7 +10,11 @@ const config = {
   important: '#__next',
   plugins: [tailwindcssLogical, tailwindPlugin],
   theme: {
-    extend: {}
+    extend: {
+      fontFamily: {
+        iransans: ['iransans', 'sans-serif']
+      }
+    }
   }
 }
 

@@ -42,7 +42,7 @@ const RootLayout = async props => {
   return (
     <TranslationWrapper headersList={headersList} lang={params.lang}>
       <html id='__next' lang={params.lang} dir={direction} suppressHydrationWarning>
-        <body className='flex is-full min-bs-full flex-auto flex-col'>
+        <body className={`flex is-full min-bs-full flex-auto flex-col ${params.lang === 'fa' ? 'persian-font' : ''}`}>
           <InitColorSchemeScript attribute='data' defaultMode={systemMode} />
           {children}
         </body>

@@ -12,6 +12,11 @@ import typography from './typography'
 const public_sans = Public_Sans({ subsets: ['latin'], weight: ['300', '400', '500', '600', '700', '800', '900'] })
 
 const theme = (settings, mode, direction) => {
+  // Use IRANSans for RTL (Persian/Arabic) and Public Sans for LTR (English)
+  const fontFamily = direction === 'rtl' 
+    ? "'iransans', sans-serif" 
+    : public_sans.style.fontFamily
+
   return {
     direction,
     components: overrides(settings.skin),
@@ -28,7 +33,7 @@ const theme = (settings, mode, direction) => {
       }
     },
     shadows: shadows(mode),
-    typography: typography(public_sans.style.fontFamily),
+    typography: typography(fontFamily),
     customShadows: customShadows(mode),
     mainColorChannels: {
       light: '47 43 61',

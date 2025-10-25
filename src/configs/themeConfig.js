@@ -16,8 +16,8 @@
  * Another way is to clear the cookie from the browser's Application/Storage tab and then reload the page.
  */
 const themeConfig = {
-  templateName: 'Vuexy',
-  homePageUrl: '/dashboards/crm',
+  templateName: 'Feechap',
+  homePageUrl: '/fa/dashboards/crm',
   settingsCookieName: 'vuexy-mui-next-demo-1',
   mode: 'system', // 'system', 'light', 'dark'
   skin: 'default', // 'default', 'bordered'
@@ -32,10 +32,10 @@ const themeConfig = {
     detached: true, //! true, false (This will not work in the Horizontal Layout or floating navbar is enabled)
     blur: true // true, false
   },
-  contentWidth: 'compact', // 'compact', 'wide'
+  contentWidth: 'wide', // 'compact', 'wide'
   footer: {
     type: 'static', // 'fixed', 'static'
-    contentWidth: 'compact', // 'compact', 'wide'
+    contentWidth: 'wide', // 'compact', 'wide'
     detached: true //! true, false (This will not work in the Horizontal Layout)
   },
   disableRipple: false, // true, false

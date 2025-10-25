@@ -7,7 +7,7 @@ import { useEffect, useRef } from 'react'
 import styled from '@emotion/styled'
 
 // Component Imports
-import VuexyLogo from '@core/svg/Logo'
+import Image from 'next/image'
 
 // Config Imports
 import themeConfig from '@configs/themeConfig'
@@ -59,8 +59,15 @@ const Logo = ({ color }) => {
 
   return (
     <div className='flex items-center'>
-      <VuexyLogo className='text-2xl text-primary' />
-      <LogoText
+      <Image
+        src='/images/logos/logo.png'
+        alt={themeConfig.templateName || 'Logo'}
+        width={120}
+        height={32}
+        priority
+        className='h-8 w-auto'
+      />
+      {/* <LogoText
         color={color}
         ref={logoTextRef}
         isHovered={isHovered}
@@ -69,7 +76,7 @@ const Logo = ({ color }) => {
         isBreakpointReached={isBreakpointReached}
       >
         {themeConfig.templateName}
-      </LogoText>
+      </LogoText> */}
     </div>
   )
 }
