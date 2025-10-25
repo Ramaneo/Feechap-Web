@@ -13,9 +13,11 @@ class PriceService extends BaseService {
    * @param {string} category - Price category (papers, uvs, cuts, etc.)
    * @param {string|number} cooperatorId - Cooperator ID (optional)
    * @param {string|number} rangeId - Circulation range ID (optional, for monitorings)
+   * @param {string} boxType - Box type (optional, for boxes)
+   * @param {string} binderyType - Bindery type (optional, for binderies)
    * @returns {Promise<object>}
    */
-  async getPriceTable(category, cooperatorId = null, rangeId = null) {
+  async getPriceTable(category, cooperatorId = null, rangeId = null, boxType = null, binderyType = null) {
     // Debug: Check if user is authenticated
     if (process.env.NODE_ENV === 'development' && !this.apiClient.isAuthenticated()) {
       console.warn('⚠️ No authentication token found. Make sure user is logged in.')
@@ -25,6 +27,8 @@ class PriceService extends BaseService {
     const params = {}
     if (cooperatorId) params.cooperator = cooperatorId
     if (rangeId) params.range_id = rangeId
+    if (boxType) params.type = boxType
+    if (binderyType) params.type = binderyType
     
     return await this.get(`/${category}`, { params })
   }
@@ -35,6 +39,24 @@ class PriceService extends BaseService {
    */
   async getCirculationRanges() {
     const response = await this.get('/circulation_range')
+    return response.data || response
+  }
+
+  /**
+   * Get box types for boxes category
+   * @returns {Promise<object[]>}
+   */
+  async getBoxTypes() {
+    const response = await this.get('/box-types')
+    return response.data || response
+  }
+
+  /**
+   * Get bindery types for binderies category
+   * @returns {Promise<object[]>}
+   */
+  async getBinderyTypes() {
+    const response = await this.get('/bindery_types')
     return response.data || response
   }
 

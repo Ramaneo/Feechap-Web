@@ -17,6 +17,8 @@ import Box from '@mui/material/Box'
 // Component Imports
 import CooperatorSelector from './CooperatorSelector'
 import CirculationRangeSelector from './CirculationRangeSelector'
+import BoxTypeSelector from './BoxTypeSelector'
+import BinderyTypeSelector from './BinderyTypeSelector'
 import DynamicPriceTable from './DynamicPriceTable'
 
 // Service Imports
@@ -106,6 +108,147 @@ const generateSchemaFromData = (sampleData, category) => {
       )
       break
 
+    case 'uvs':
+      if (sampleData.machine) {
+        columns.push({ key: 'machine.title', label: 'ماشین', type: 'text', editable: false })
+      }
+      if (sampleData.uv_type) {
+        columns.push({ key: 'uv_type.title', label: 'نوع UV', type: 'text', editable: false })
+      }
+      columns.push(
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
+    case 'selefons':
+      if (sampleData.machine) {
+        columns.push({ key: 'machine.title', label: 'ماشین', type: 'text', editable: false })
+      }
+      if (sampleData.selefon_type) {
+        columns.push({ key: 'selefon_type.title', label: 'نوع سلفون', type: 'text', editable: false })
+      }
+      columns.push(
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
+    case 'laminates':
+      if (sampleData.machine) {
+        columns.push({ key: 'machine.title', label: 'ماشین', type: 'text', editable: false })
+      }
+      columns.push(
+        { key: 'opaque', label: 'مات', type: 'number', editable: true },
+        { key: 'glossy', label: 'براق', type: 'number', editable: true }
+      )
+      break
+
+    case 'boxes':
+      if (sampleData.box_type) {
+        columns.push({ key: 'box_type.title', label: 'نوع جعبه', type: 'text', editable: false })
+      }
+      if (sampleData.title) {
+        columns.push({ key: 'title', label: 'سایز', type: 'text', editable: false })
+      }
+      columns.push(
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
+    case 'pockets':
+    case 'bags':
+      columns.push(
+        { key: 'title', label: 'عنوان', type: 'text', editable: true },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
+    case 'binderies':
+      if (sampleData.trim) {
+        columns.push({ key: 'trim.title', label: 'قطع', type: 'text', editable: false })
+      }
+      columns.push(
+        { key: 'tahrir', label: 'تحریر', type: 'number', editable: true },
+        { key: 'gelase', label: 'گلاسه', type: 'number', editable: true }
+      )
+      break
+
+    case 'framings':
+      columns.push(
+        { key: 'type', label: 'نوع', type: 'text', editable: true },
+        { key: 'size', label: 'سایز', type: 'number', editable: true },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
+    case 'plates':
+      columns.push(
+        { key: 'perimeter', label: 'محیط', type: 'number', editable: true },
+        { key: 'size', label: 'سایز', type: 'number', editable: true },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
+    case 'golds':
+      if (sampleData.gold_size) {
+        columns.push({ 
+          key: 'gold_size', 
+          label: 'اندازه طلاکوب', 
+          type: 'text', 
+          editable: false,
+          formatter: (goldSize) => goldSize ? `${goldSize.width} × ${goldSize.height}` : '-'
+        })
+      }
+      columns.push(
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
+    case 'letterpress':
+      if (sampleData.machine) {
+        columns.push({ key: 'machine.title', label: 'ماشین', type: 'text', editable: false })
+      }
+      columns.push(
+        { key: 'per_cycle', label: 'هر دور', type: 'number', editable: true }
+      )
+      break
+
+    case 'cuts':
+      columns.push(
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
+    case 'glues':
+      columns.push(
+        { key: 'quantity', label: 'تعداد', type: 'number', editable: true },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
+    case 'numerations':
+      columns.push(
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
+    case 'perforages':
+      if (sampleData.machine) {
+        columns.push({ key: 'machine.title', label: 'ماشین', type: 'text', editable: false })
+      }
+      columns.push(
+        { key: 'per_cycle', label: 'هر دور', type: 'number', editable: true }
+      )
+      break
+
+    case 'others':
+      columns.push(
+        { key: 'title', label: 'عنوان', type: 'text', editable: true },
+        { key: 'description', label: 'توضیحات', type: 'text', editable: true },
+        { key: 'type', label: 'نوع', type: 'text', editable: true },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      )
+      break
+
     default:
       // Generic schema - dynamically generate from data
       Object.keys(sampleData).forEach(key => {
@@ -187,6 +330,94 @@ const getDefaultSchema = (category) => {
         { key: 'metallic', label: 'متالیک', type: 'number', editable: true },
         { key: 'verni', label: 'ورنی', type: 'number', editable: true }
       ]
+    case 'uvs':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
+    case 'selefons':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
+    case 'laminates':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'opaque', label: 'مات', type: 'number', editable: true },
+        { key: 'glossy', label: 'براق', type: 'number', editable: true }
+      ]
+    case 'boxes':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'title', label: 'سایز', type: 'text', editable: false },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
+    case 'pockets':
+    case 'bags':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'title', label: 'عنوان', type: 'text', editable: true },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
+    case 'binderies':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'tahrir', label: 'تحریر', type: 'number', editable: true },
+        { key: 'gelase', label: 'گلاسه', type: 'number', editable: true }
+      ]
+    case 'framings':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'type', label: 'نوع', type: 'text', editable: true },
+        { key: 'size', label: 'سایز', type: 'number', editable: true },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
+    case 'plates':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'perimeter', label: 'محیط', type: 'number', editable: true },
+        { key: 'size', label: 'سایز', type: 'number', editable: true },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
+    case 'golds':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
+    case 'letterpress':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'per_cycle', label: 'هر دور', type: 'number', editable: true }
+      ]
+    case 'cuts':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
+    case 'glues':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'quantity', label: 'تعداد', type: 'number', editable: true },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
+    case 'numerations':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
+    case 'perforages':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'per_cycle', label: 'هر دور', type: 'number', editable: true }
+      ]
+    case 'others':
+      return [
+        { key: 'id', label: 'شناسه', type: 'number', editable: false },
+        { key: 'title', label: 'عنوان', type: 'text', editable: true },
+        { key: 'description', label: 'توضیحات', type: 'text', editable: true },
+        { key: 'type', label: 'نوع', type: 'text', editable: true },
+        { key: 'price', label: 'قیمت', type: 'number', editable: true }
+      ]
     default:
       return [
         { key: 'id', label: 'شناسه', type: 'number', editable: false },
@@ -203,6 +434,8 @@ const PriceTableContainer = ({
 }) => {
   const [selectedCooperator, setSelectedCooperator] = useState(null)
   const [selectedRange, setSelectedRange] = useState(null)
+  const [selectedBoxType, setSelectedBoxType] = useState(null)
+  const [selectedBinderyType, setSelectedBinderyType] = useState(null)
   const [priceData, setPriceData] = useState([])
   const [tableSchema, setTableSchema] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -210,7 +443,13 @@ const PriceTableContainer = ({
   const [isEditing, setIsEditing] = useState(false)
 
   // Determine if this category needs circulation range selector
-  const needsRangeSelector = category === 'monitorings'
+  const needsRangeSelector = category === 'monitorings' || category === 'boxes' || category === 'golds' || category === 'cuts' || category === 'glues'
+  
+  // Determine if this category needs box type selector
+  const needsBoxTypeSelector = category === 'boxes'
+  
+  // Determine if this category needs bindery type selector
+  const needsBinderyTypeSelector = category === 'binderies'
 
   // Fetch price table data
   const fetchPriceData = useCallback(async () => {
@@ -232,7 +471,9 @@ const PriceTableContainer = ({
       const dataResponse = await priceService.getPriceTable(
         category, 
         selectedCooperator,
-        needsRangeSelector ? selectedRange : null
+        needsRangeSelector ? selectedRange : null,
+        needsBoxTypeSelector ? selectedBoxType : null,
+        needsBinderyTypeSelector ? selectedBinderyType : null
       )
       
       if (process.env.NODE_ENV === 'development') {
@@ -263,9 +504,9 @@ const PriceTableContainer = ({
     } finally {
       setLoading(false)
     }
-  }, [category, selectedCooperator, selectedRange, needsRangeSelector])
+  }, [category, selectedCooperator, selectedRange, selectedBoxType, selectedBinderyType, needsRangeSelector, needsBoxTypeSelector, needsBinderyTypeSelector])
 
-  // Load data when cooperator or range changes
+  // Load data when cooperator, range, box type, or bindery type changes
   useEffect(() => {
     fetchPriceData()
   }, [fetchPriceData])
@@ -346,12 +587,36 @@ const PriceTableContainer = ({
           onCooperatorChange={setSelectedCooperator}
         />
 
-        {/* Circulation Range Selector (for monitorings) */}
+        {/* Box Type Selector (for boxes) */}
+        {needsBoxTypeSelector && (
+          <Box className="mt-4">
+            <BoxTypeSelector
+              category={category}
+              value={selectedBoxType}
+              onChange={setSelectedBoxType}
+            />
+          </Box>
+        )}
+
+        {/* Bindery Type Selector (for binderies) */}
+        {needsBinderyTypeSelector && (
+          <Box className="mt-4">
+            <BinderyTypeSelector
+              category={category}
+              value={selectedBinderyType}
+              onChange={setSelectedBinderyType}
+            />
+          </Box>
+        )}
+
+        {/* Circulation Range Selector (for monitorings and boxes) */}
         {needsRangeSelector && (
-          <CirculationRangeSelector
-            selectedRange={selectedRange}
-            onRangeChange={setSelectedRange}
-          />
+          <Box className="mt-4">
+            <CirculationRangeSelector
+              selectedRange={selectedRange}
+              onRangeChange={setSelectedRange}
+            />
+          </Box>
         )}
 
         {/* Error Display */}
